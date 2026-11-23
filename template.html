@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aqours 回收率</title>
+<meta name="description" content="勾选去过的 Aqours 公演，看看现场回收了多少首曲子">
+<style>
+:root{--bg:#eef6fa;--card:#fff;--ink:#12303f;--sub:#527184;--line:#d3e4ec;--acc:#0079b8;--acc-ink:#fff;--track:#dcebf2;--water:#bfe4f5;--water2:#93d2ee;--orange:#d85c00}
+@media(prefers-color-scheme:dark){:root{--bg:#0a1a24;--card:#10252f;--ink:#e2f1f8;--sub:#8fb0c1;--line:#1f3b48;--acc:#4fb8ee;--acc-ink:#06202e;--track:#1c3846;--water:#123f55;--water2:#175878;--orange:#ff9a4a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Hiragino Sans","PingFang SC","Noto Sans JP","Noto Sans SC",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+main,header>div{max-width:820px;margin:0 auto;padding:0 16px}
+header{border-bottom:1px solid var(--line)}
+header>div{display:flex;justify-content:space-between;align-items:center;height:52px}
+header a{font-weight:700;color:var(--acc);text-decoration:none;letter-spacing:.04em}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1{font-size:30px;margin:28px 0 4px;line-height:1.25}
+h2{font-size:16px;margin:28px 0 10px}
+.lead,.note{color:var(--sub);margin:0}.note{font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.hero{position:relative;margin:18px 0 14px;padding:22px 22px 24px;display:flex;flex-wrap:wrap;gap:16px 36px;align-items:flex-end;min-height:150px}
+.hero>*{position:relative}
+.sea{position:absolute!important;inset:auto 0 0 0;transition:height .8s cubic-bezier(.2,.7,.2,1);background:linear-gradient(var(--water),var(--water2))}
+.sea svg{position:absolute;left:0;bottom:calc(100% - 1px);width:100%;height:10px;fill:var(--water);display:block}
+.big{font-size:52px;font-weight:700;line-height:1;color:var(--acc)}
+.big small{font-size:17px;color:var(--ink);font-weight:500}
+.hero .main{flex:1 1 220px}
+.kv{display:flex;gap:26px;flex-wrap:wrap}.kv div span{display:block;font-size:12px;color:var(--ink);opacity:.75}.kv b{font-size:21px}
+.row{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:10px 0}
+.seg{display:inline-flex;background:var(--track);border-radius:10px;padding:3px}
+.seg button{border:0;background:none;padding:5px 12px;border-radius:8px;font-size:13px}
+.seg button[aria-pressed=true]{background:var(--card);font-weight:700}
+label.ck{font-size:13px;display:inline-flex;gap:6px;align-items:center;cursor:pointer}input[type=checkbox]{accent-color:var(--acc);width:15px;height:15px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 13px;font-size:13px;text-decoration:none;color:var(--ink)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);font-weight:700}
+.btn:hover{border-color:var(--acc)}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin:20px 0 14px}
+.tabs button{border:0;background:none;padding:10px 16px;color:var(--sub);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected=true]{color:var(--ink);font-weight:700;border-color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 12px;font-size:13px}
+.chips button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+select,input[type=search]{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 10px;font-size:13px;min-width:0}
+input[type=search]{flex:1 1 160px}
+.li{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;min-height:46px}
+.li:last-child{border:0}a.li:hover{background:color-mix(in srgb,var(--acc) 7%,transparent)}
+.nm{flex:1;min-width:0;overflow-wrap:anywhere}.nm small{display:block;color:var(--sub);font-size:12px}
+.meta{font-size:12px;color:var(--sub);text-align:right;white-space:nowrap}
+.bar{width:74px;height:6px;border-radius:9px;background:var(--track);overflow:hidden;flex:none}.bar i{display:block;height:100%;background:var(--acc)}
+.ct{width:62px;text-align:right;flex:none;color:var(--sub);font-size:13px}.ct b{color:var(--ink);font-size:15px}.got .ct b{color:var(--acc)}
+.dots{display:inline-flex;flex:none;width:64px}.dots i{width:13px;height:13px;border-radius:50%;margin-right:-7px;border:1.5px solid var(--card)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.mem{display:inline-block;margin-right:10px;white-space:nowrap;font-size:14px}
+.ev{margin-bottom:12px;padding:14px 16px}.ev h3{margin:0;font-size:15px;line-height:1.45}.ev .sub{font-size:12px;color:var(--sub);margin-bottom:6px}
+.tag{display:inline-block;background:var(--track);border-radius:5px;padding:0 7px;margin-right:6px;font-size:12px}
+.leg{font-size:13px;font-weight:700;margin:10px 0 4px}.leg span{font-weight:400;color:var(--sub);margin-left:8px}
+.sh{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin:5px 0}
+.sh label{border:1px solid var(--line);border-radius:10px;padding:5px 12px;display:inline-flex;gap:8px;align-items:center;cursor:pointer;font-size:13px}
+.sh label:has(:checked){background:color-mix(in srgb,var(--acc) 13%,var(--card));border-color:var(--acc)}
+.lk{border:0;background:none;color:var(--acc);text-decoration:underline;font-size:13px;padding:4px}
+.setl{flex-basis:100%;margin:2px 0 8px;padding-left:34px;font-size:13px;color:var(--sub)}.setl b{font-weight:500;color:var(--ink)}.setl a{color:var(--ink)}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--sub);margin:10px 0;font-size:14px}
+.banner{background:var(--orange);color:var(--bg);padding:10px 16px;border-radius:12px;margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.banner .grow{flex:1 1 200px}
+.yes{color:var(--acc);font-weight:700}footer{margin:40px 0;font-size:12px;color:var(--sub)}footer a{color:inherit}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);max-width:92vw;width:460px}
+textarea{width:100%;height:90px;font:12px monospace;background:var(--bg);color:inherit;border:1px solid var(--line);border-radius:8px}
+@media(max-width:560px){.li{padding:10px 12px;gap:8px}.bar{display:none}.dots{width:48px}.dots i{margin-right:-8.5px}.tabs button{padding:10px 10px}.hero{padding:18px}.ct{width:52px}.meta{font-size:11px;max-width:80px;white-space:normal}}
+@media(prefers-reduced-motion:reduce){.sea{transition:none}}
+</style></head><body>
+<header><div><a href="#">AQOURS 回収率</a><button class="btn" id="lang"></button></div></header>
+<main id="app"></main>
+<script>
+const D=/*DATA*/;
+const M=[['高海千歌','千歌','#FF9547'],['桜内梨子','梨子','#FF9EAC'],['松浦果南','果南','#27C1B7'],['黒澤ダイヤ','ダイヤ','#DB0839'],['渡辺 曜','曜','#66C0FF'],['津島善子','善子','#A6B1BC'],['国木田花丸','花丸','#FFD010'],['小原鞠莉','鞠莉','#C252C6'],['黒澤ルビィ','ルビィ','#FF6FBE']];
+const T={zh:{title:'Aqours 回收率',lead:'勾选去过的公演，看看演过的曲子里你现场看到了多少。记录保存在这个浏览器里。',got:'回收曲目',att:'参加公演',tot:'观看曲数（累计）',rate:'回收率',solo:'Aqours 系公演',all:'含合同·音乐节',noOnline:'排除线上公演',ver:'改编版算不同曲',nonorig:'计入非原编制演出',short:'计入短版·串烧',post:'发到 X',share:'复制分享链接',backup:'备份 / 恢复',bySong:'按曲目',byMem:'按成员',shows:'参加的公演',g:{aqours:'全体曲',cyaron:'CYaRon!',azalea:'AZALEA',gk:'Guilty Kiss',mini:'小队·其他',solo:'Solo',yohane:'幻日夜羽'},st:['全部状态','未回收','已回收','有没看过的编制','从未演出'],so:['回收率 高→低','回收率 低→高','演出次数','发售顺序'],hint:'在「参加的公演」里勾选去过的场次，这里就会显示回收率。',songs:'首',form:'编制',exc:'已排除',never:'未演出',search:'搜索曲名',mode:['公演数','曲数'],msort:['成员顺序','回收率 高→低'],mnote:['每位成员出演的公演里，你参加了多少场。','每位成员在现场唱过的曲子里，你看到了多少首。'],kinds:{live:'Live',fan:'Fan Meeting·活动',joint:'合同·音乐节'},set:n=>'歌单 '+n+' 首',noset:'歌单待更新',soon:'未举行',back:'← 返回',seen:'现场看过',perf:'场',forms:'各编制',plist:'演出过的公演',y:'看过',n:'没看',rel:'发售',copied:'已复制',viewing:'正在查看别人分享的记录',imp:'导入为我的记录',exit:'回到我的记录',conf:'将覆盖你现在的记录，确定吗？',bk:'复制下面的文字可备份；粘贴后点恢复。',restore:'恢复',close:'关闭',bad:'格式不对',none:'没有符合条件的曲目',orig:'原编制',from:'起',allev:'全部选择',clear:'清空全选',
+foot:'非官方粉丝制作。歌单数据来自 <a href="https://love-live.fandom.com/">Love Live! Wiki</a>（CC BY-SA），可能有误；成员临时缺席仅部分反映。只统计 Aqours 系列曲目，纯器乐串场不计。'},
+ja:{title:'Aqours 回収率',lead:'参加した公演を選ぶと、披露された曲のうち現地で観た曲がわかります。記録はこのブラウザに保存されます。',got:'回収した曲',att:'参加した公演',tot:'観た曲（延べ）',rate:'回収率',solo:'Aqours の公演',all:'合同・フェスも',noOnline:'オンライン公演を除く',ver:'アレンジ違いを別の曲にする',nonorig:'オリメン以外の披露も数える',short:'ショート版・メドレーも数える',post:'X に投稿',share:'共有リンクをコピー',backup:'バックアップ',bySong:'曲ごと',byMem:'メンバーごと',shows:'参加した公演',g:{aqours:'全体曲',cyaron:'CYaRon!',azalea:'AZALEA',gk:'Guilty Kiss',mini:'ミニユニット・他',solo:'ソロ',yohane:'幻日のヨハネ'},st:['すべて','未回収','回収済み','観ていない編成がある','未披露'],so:['回収率が高い順','回収率が低い順','披露回数が多い順','発売順'],hint:'「参加した公演」で公演を選ぶと、ここに回収率が出ます。',songs:'曲',form:'編成',exc:'除外',never:'未披露',search:'曲名で検索',mode:['公演数','曲数'],msort:['メンバー順','回収率が高い順'],mnote:['メンバーが歌った公演のうち、参加した公演の数です。','メンバーが歌った曲のうち、現地で観た曲の数です。'],kinds:{live:'ライブ',fan:'ファンミ・イベント',joint:'合同・フェス'},set:n=>'セトリ '+n+' 曲',noset:'セトリ未登録',soon:'開催前',back:'← 戻る',seen:'現地で観た回数',perf:'公演',forms:'編成ごと',plist:'披露した公演',y:'観た',n:'観ていない',rel:'発売',copied:'コピーしました',viewing:'共有された記録を表示中',imp:'自分の記録に取り込む',exit:'自分の記録に戻る',conf:'今の記録を上書きします。よろしいですか？',bk:'下の文字列を保存してください。貼り付けて復元できます。',restore:'復元',close:'閉じる',bad:'形式が正しくありません',none:'該当する曲がありません',orig:'オリメン',from:'から',allev:'全部選ぶ',clear:'全部外す',
+foot:'非公式のファンサイトです。セトリは <a href="https://love-live.fandom.com/">Love Live! Wiki</a>（CC BY-SA）によります。誤りを含むことがあり、欠席は一部のみ反映。Aqours 関連曲のみ集計し、インストは除きます。'}};
+const KEY='aqours-kaishu';
+let S={att:[],all:false,noOnline:false,ver:false,nonorig:true,short:true,lang:'zh'};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let ui={tab:'songs',g:new Set,st:0,so:0,q:'',mode:0,msort:0,open:new Set},shared=null;
+const SH=[];D.events.forEach(e=>e.shows.forEach(s=>{s.e=e;SH[s.id]=s}));
+const today=(d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)(new Date);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const enc=a=>{let b=Array(Math.ceil(SH.length/6)).fill(0);a.forEach(i=>b[i/6|0]|=1<<i%6);return b.map(x=>'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'[x]).join('').replace(/A+$/,'')||'A'};
+const dec=s=>{let r=[];[...s].forEach((c,k)=>{let x='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'.indexOf(c);for(let j=0;j<6;j++)if(x>>j&1&&SH[k*6+j])r.push(k*6+j)});return r};
+const att=()=>new Set(shared||S.att);
+function inScope(s){return(S.all||s.e.kind!='joint')&&!(S.noOnline&&s.e.online)&&s.date<=today}
+const isOrig=(s,p)=>p.m==s.o||(s.id=='omoiyohitotsuninare'&&p.m=='012345678')||s.id=='omoiyohitotsuninare'&&p.m==s.o;
+function calc(){
+ const A=att(),by={},R={};
+ D.songs.forEach(s=>by[s.id]=s);
+ const get=(s,v)=>{const k=s.id+(v?'~'+v:'');return R[k]||(R[k]={k,s,v,ps:new Map,ex:new Set,raw:0})};
+ D.songs.forEach(s=>get(s,''));
+ SH.forEach(sh=>{if(!inScope(sh))return;sh.set.forEach(p=>{const s=by[p.s],r=get(s,S.ver&&p.v||'');
+  if((!S.nonorig&&!isOrig(s,p))||(!S.short&&p.short)){r.ex.add(sh.id);return}
+  if(!r.ps.has(sh.id))r.ps.set(sh.id,[]);r.ps.get(sh.id).push(p)})});
+ const rows=Object.values(R).map(r=>{const F=new Map;let seen=0;
+  r.ps.forEach((ps,id)=>{if(A.has(id))seen++;new Set(ps.map(p=>p.m)).forEach(m=>{const f=F.get(m)||{m,n:0,seen:0,d:'9'};f.n++;if(A.has(id))f.seen++;if(SH[id].date<f.d)f.d=SH[id].date;F.set(m,f)})});
+  r.ps.forEach((_,id)=>r.ex.delete(id));
+  return Object.assign(r,{n:r.ps.size,seen,F:[...F.values()].sort((a,b)=>a.d<b.d?-1:1)})});
+ const perf=rows.filter(r=>r.n),got=perf.filter(r=>r.seen);
+ const shows=SH.filter(s=>A.has(s.id)&&inScope(s));
+ return{rows,perf:perf.length,got:got.length,att:shows.length,tot:got.reduce((a,r)=>a+r.seen,0)}}
+const L=()=>T[S.lang];
+const dots=m=>{const l=m.length>6&&m.length==9?'012345678':m;return`<span class="dots" aria-hidden="true">${[...l].map(i=>`<i style="background:${M[i][2]}"></i>`).join('')}</span>`};
+const mems=m=>[...m].map(i=>`<span class="mem"><i class="dot" style="background:${M[i][2]}"></i>${M[i][1]}</span>`).join('');
+const bar=(a,b)=>`<span class="bar"><i style="width:${b?a/b*100:0}%"></i></span><span class="ct"><b>${a}</b> / ${b}</span>`;
+const WD={zh:'日一二三四五六',ja:'日月火水木金土'};
+const fd=d=>d.length<9?d.replace('-','/'):d.replace(/-/g,'/')+`（${WD[S.lang][new Date(d+'T12:00').getDay()]}）`;
+const songName=r=>esc(r.s.t)+(r.v?` <small>${esc(r.v)}</small>`:'');
+const vis=()=>D.events.filter(e=>(S.all||e.kind!='joint')&&!(S.noOnline&&e.online)).sort((a,b)=>a.shows.reduce((m,s)=>s.date>m?s.date:m,'')<b.shows.reduce((m,s)=>s.date>m?s.date:m,'')?1:-1);
+function head(c){const t=L(),p=c.perf?c.got/c.perf*100:0;
+ return`<h1>${t.title}</h1><p class="lead">${t.lead}</p>
+ <div class="card hero"><div class="sea" style="height:${p?Math.max(6,p*.93):0}%"><svg viewBox="0 0 800 10" preserveAspectRatio="none"><path d="M0 10V5Q50 0 100 5T200 5T300 5T400 5T500 5T600 5T700 5T800 5V10Z"/></svg></div>
+ <div class="main"><div>${t.got}</div><div class="big">${c.got} <small>/ ${c.perf} ${t.songs}</small></div></div>
+ <div class="kv"><div><span>${t.att}</span><b>${c.att}</b></div><div><span>${t.tot}</span><b>${c.tot}</b></div><div><span>${t.rate}</span><b>${p.toFixed(1).replace('.0','')}%</b></div></div></div>
+ <div class="row"><span class="seg"><button data-a="all:0" aria-pressed="${!S.all}">${t.solo}</button><button data-a="all:1" aria-pressed="${S.all}">${t.all}</button></span>
+ ${['noOnline','ver','nonorig','short'].map(k=>`<label class="ck"><input type="checkbox" data-c="${k}" ${S[k]?'checked':''}>${t[k]}</label>`).join('')}</div>
+ <div class="row"><a class="btn p" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(`Aqours 回収率 ${p.toFixed(1)}%（${c.got} / ${c.perf} ${t.songs}・${c.att} ${t.perf}）\n#Aqours #lovelive`)}">${t.post}</a><button class="btn" data-a="share">${t.share}</button><button class="btn" data-a="backup">${t.backup}</button></div>`}
+function filt(c){const t=L();let r=c.rows.filter(r=>!ui.g.size||ui.g.has(r.s.g));const q=ui.q.trim().toLowerCase();
+ if(q)r=r.filter(x=>(x.s.t+' '+x.s.r).toLowerCase().includes(q));
+ r=r.filter(x=>[1,x.n&&!x.seen,x.seen,x.n&&x.F.some(f=>!f.seen),!x.n][ui.st]);
+ const q_=x=>x.n?x.seen/x.n:-1;
+ const cmp=[(a,b)=>q_(b)-q_(a)||b.n-a.n,(a,b)=>!a.n-!b.n||q_(a)-q_(b)||b.n-a.n,(a,b)=>b.n-a.n,(a,b)=>a.s.d<b.s.d?-1:a.s.d>b.s.d?1:0][ui.so];
+ return r.sort(cmp)}
+function songList(c){const t=L(),r=filt(c);return`<p class="note">${r.length} ${t.songs}</p>`+(r.length?`<div class="card">${r.map(x=>`<a class="li ${x.seen?'got':''}" href="#song/${encodeURIComponent(x.k)}">${dots(x.s.o)}<span class="nm">${songName(x)}</span><span class="meta">${x.F.length>1?`${t.form} ${x.F.filter(f=>f.seen).length}/${x.F.length} `:''}${x.ex.size?` ${t.exc} ${x.ex.size}`:''}</span>${x.n?bar(x.seen,x.n):`<span class="meta">${t.never}</span>`}</a>`).join('')}</div>`:`<div class="empty">${t.none}</div>`)}
+function tabSongs(c){const t=L();return`<div class="chips">${Object.entries(t.g).map(([k,v])=>`<button data-a="g:${k}" aria-pressed="${ui.g.has(k)}">${v}</button>`).join('')}</div>
+ <div class="row"><select data-s="st">${t.st.map((x,i)=>`<option value="${i}" ${ui.st==i?'selected':''}>${x}</option>`).join('')}</select><select data-s="so">${t.so.map((x,i)=>`<option value="${i}" ${ui.so==i?'selected':''}>${x}</option>`).join('')}</select><input type="search" id="q" placeholder="${t.search}" aria-label="${t.search}" value="${esc(ui.q)}"></div>
+ ${c.att?'':`<div class="empty">${t.hint}</div>`}<div id="list">${songList(c)}</div>`}
+function tabMem(c){const t=L(),A=att();let rows=M.map((m,i)=>{const sh=new Set;let n=0,g=0;c.rows.forEach(r=>{let a=0,b=0;r.ps.forEach((ps,id)=>{if(ps.some(p=>p.m.includes(i))){sh.add(id);a=1;if(A.has(id))b=1}});n+=a;g+=b});const sg=[...sh].filter(x=>A.has(x)).length;return{m,v:ui.mode?[g,n]:[sg,sh.size],o:ui.mode?[sg,sh.size]:[g,n]}});
+ if(ui.msort==1)rows.sort((a,b)=>b.v[0]/b.v[1]-a.v[0]/a.v[1]);
+ return`<div class="row"><span class="seg">${t.mode.map((x,i)=>`<button data-a="mode:${i}" aria-pressed="${ui.mode==i}">${x}</button>`).join('')}</span><select data-s="msort">${t.msort.map((x,i)=>`<option value="${i}" ${ui.msort==i?'selected':''}>${x}</option>`).join('')}</select></div><p class="note">${t.mnote[ui.mode]}</p>${c.att?'':`<div class="empty">${t.hint}</div>`}
+ <div class="card" style="margin-top:10px">${rows.map(r=>`<div class="li"><i class="dot" style="background:${r.m[2]};width:13px;height:13px"></i><span class="nm">${r.m[0]}</span><span class="meta">${t.mode[1-ui.mode]} ${r.o[0]}/${r.o[1]}</span>${bar(r.v[0],r.v[1])}</div>`).join('')}</div>`}
+const showName=s=>[s.leg,s.label].filter(Boolean).join(' ')||fd(s.date);
+function tabShows(){const t=L(),A=att();return vis().map(e=>{const ds=e.shows.map(s=>s.date).sort();let h='',last=null;
+ e.shows.forEach(s=>{if(s.leg+s.venue!==last){last=s.leg+s.venue;if(last)h+=`<div class="leg">${esc(s.leg)}<span>${esc(s.venue)}</span></div>`}
+ const op=ui.open.has(s.id),fut=s.date>today;
+ h+=`<div class="sh"><label><input type="checkbox" data-show="${s.id}" ${A.has(s.id)?'checked':''} ${fut||shared?'disabled':''}><b>${esc(s.label)}</b> ${fd(s.date)}</label>${s.set.length?`<button class="lk" data-a="open:${s.id}" aria-expanded="${op}">${t.set(s.set.length)}</button>`:`<span class="note">${fut?t.soon:t.noset}</span>`}${op?`<ol class="setl">${s.set.map(p=>{const g=D.songs.find(x=>x.id==p.s);return`<li><a href="#song/${g.id}">${esc(g.t)}</a>${p.v?' · '+esc(p.v):''}${p.short?' · short':''}${p.m!='012345678'?' — '+[...p.m].map(i=>M[i][1]).join('・'):''}</li>`}).join('')}</ol>`:''}</div>`});
+ const ok=e.shows.filter(s=>s.date<=today);const full=ok.length&&ok.every(s=>A.has(s.id));
+ return`<section class="card ev"><h3>${esc(e.name)}</h3><div class="sub"><span class="tag">${t.kinds[e.kind]}</span>${ds[0].replace(/-/g,'/')}${ds.at(-1)!=ds[0]?' – '+ds.at(-1).replace(/-/g,'/'):''}${ok.length>1&&!shared?` <button class="lk" data-a="ev:${D.events.indexOf(e)}">${full?t.clear:t.allev}</button>`:''}</div>${h}</section>`}).join('')}
+function song(k,c){const t=L(),A=att();let r=c.rows.find(x=>x.k==k)||c.rows.find(x=>x.k==k.split('~')[0]);if(!r)return`<p><a href="#">${t.back}</a></p>`;
+ const ids=[...r.ps.keys()].sort((a,b)=>SH[a].date<SH[b].date?1:SH[a].date>SH[b].date?-1:b-a);
+ return`<p style="margin-top:20px"><a href="#" style="color:var(--acc)">${t.back}</a></p><h1 style="margin-top:8px">${songName(r)}</h1><p class="lead">${r.s.r?esc(r.s.r)+' · ':''}${esc(r.s.a)} · ${r.s.d.replace(/-/g,'/')} ${t.rel}</p>
+ <div class="card hero"><div class="sea" style="height:${r.seen?Math.max(6,r.seen/r.n*93):0}%"></div><div class="main"><div>${t.seen}</div><div class="big">${r.seen} <small>/ ${r.n} ${t.perf}</small></div></div><div class="note">${S.all?t.all:t.solo}</div></div>
+ ${r.F.length?`<h2>${t.forms}</h2><div class="card">${r.F.map(f=>`<div class="li"><span class="nm">${mems(f.m)}<small>${isOrig(r.s,f)?t.orig+' · ':''}${f.d.replace(/-/g,'/')} ${t.from}</small></span>${bar(f.seen,f.n)}</div>`).join('')}</div><h2>${t.plist}</h2><div class="card">${ids.map(i=>{const s=SH[i],p=r.ps.get(i)[0];return`<div class="li"><span class="nm">${esc(s.e.name)}<small>${fd(s.date)} ${esc([s.leg,s.label].filter(Boolean).join(' '))}${p.v?' · '+esc(p.v):''}${p.short?' · short':''}</small></span><span class="meta ${A.has(i)?'yes':''}">${A.has(i)?t.y:t.n}</span></div>`}).join('')}</div>`:`<div class="empty">${t.never}</div>`}`}
+const app=document.getElementById('app');
+function render(){const t=L(),c=calc(),h=decodeURIComponent(location.hash.slice(1));
+ document.documentElement.lang=S.lang=='zh'?'zh-CN':'ja';document.title=t.title;document.getElementById('lang').textContent=S.lang=='zh'?'日本語':'中文';
+ let b=shared?`<div class="banner"><span class="grow">${t.viewing}</span><button class="btn" data-a="imp">${t.imp}</button><button class="btn" data-a="exit">${t.exit}</button></div>`:'';
+ if(h.startsWith('song/'))b+=song(h.slice(5),c);
+ else b+=head(c)+`<div class="tabs" role="tablist">${[['songs',t.bySong],['mem',t.byMem],['shows',t.shows]].map(([k,v])=>`<button role="tab" data-a="tab:${k}" aria-selected="${ui.tab==k}">${v}</button>`).join('')}</div>`+({songs:tabSongs,mem:tabMem,shows:tabShows})[ui.tab](c);
+ app.innerHTML=b+`<footer>${t.foot}</footer>`}
+let scrollY0=0;
+function route(){const h=location.hash.slice(1);if(h.startsWith('r=')){shared=dec(h.slice(2));history.replaceState(null,'',location.pathname+location.search);}
+ render();if(h.startsWith('song/'))scrollTo(0,0);else scrollTo(0,scrollY0)}
+addEventListener('hashchange',route);
+addEventListener('click',async ev=>{const a=ev.target.closest('a[href^="#song/"]');if(a&&!location.hash.startsWith('#song'))scrollY0=scrollY;
+ const b=ev.target.closest('[data-a]');if(!b)return;const[k,v]=b.dataset.a.split(':'),t=L();
+ if(k=='all')S.all=v=='1';else if(k=='tab')ui.tab=v;else if(k=='g')ui.g.has(v)?ui.g.delete(v):ui.g.add(v);else if(k=='mode')ui.mode=+v;else if(k=='open'){ui.open.has(+v)?ui.open.delete(+v):ui.open.add(+v)}
+ else if(k=='ev'){const ok=D.events[v].shows.filter(s=>s.date<=today).map(s=>s.id),A=new Set(S.att),full=ok.every(i=>A.has(i));ok.forEach(i=>full?A.delete(i):A.add(i));S.att=[...A]}
+ else if(k=='share'){const u=location.href.split('#')[0]+'#r='+enc([...att()]);try{await navigator.clipboard.writeText(u);b.textContent=t.copied;setTimeout(render,1200)}catch(e){prompt('',u)}return}
+ else if(k=='imp'){if(S.att.length&&!confirm(t.conf))return;S.att=shared;shared=null}else if(k=='exit')shared=null
+ else if(k=='backup'){const d=document.createElement('dialog');d.innerHTML=`<p>${t.bk}</p><textarea>${enc(S.att)}</textarea><div class="row"><button class="btn p">${t.restore}</button><button class="btn">${t.close}</button></div>`;document.body.append(d);d.showModal();const[x,y]=d.querySelectorAll('button');y.onclick=()=>d.close();x.onclick=()=>{const s=d.querySelector('textarea').value.trim();if(!/^[\w-]+$/.test(s))return alert(t.bad);if(S.att.length&&!confirm(t.conf))return;S.att=dec(s);save();d.close();render()};d.onclose=()=>d.remove();return}
+ save();const y=scrollY;render();scrollTo(0,y)});
+addEventListener('change',ev=>{const d=ev.target.dataset;if(d.c)S[d.c]=ev.target.checked;else if(d.s)ui[d.s]=+ev.target.value;else if(d.show){const A=new Set(S.att);ev.target.checked?A.add(+d.show):A.delete(+d.show);S.att=[...A]}else return;save();const y=scrollY,f=d.show;render();scrollTo(0,y);if(f)document.querySelector(`[data-show="${f}"]`)?.focus({preventScroll:true})});
+addEventListener('input',ev=>{if(ev.target.id=='q'){ui.q=ev.target.value;document.getElementById('list').innerHTML=songList(calc())}});
+document.getElementById('lang').onclick=()=>{S.lang=S.lang=='zh'?'ja':'zh';save();render()};
+route();
+</script></body></html>
