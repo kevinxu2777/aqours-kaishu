@@ -126,6 +126,12 @@ awm['shows'].remove(b17);awm['name']='Anisong World Matsuri 2017 ～Japan Kawaii
 AR='メルセデス・ベンツアリーナ（上海）'
 b17.update(leg='BML-SP 2017',venue=AR)
 outE.append(dict(name='BILIBILI MACRO LINK - STAR PHASE（BML-SP）',kind='joint',online=False,shows=[b17,dict(id=n,leg='BML-SP 2019',venue=AR,label='',date='2019-07-21',set=[dict(s=slug(k),m='01245678') for k in ['Mirai no Bokura wa Shitteru yo','WATER BLUE NEW WORLD','WONDERFUL STORIES','Yuuki wa doko ni? Kimi no Mune ni!']])]));n+=1
+# Puroland 2025-01-19 (setlist.fm + attendee report). KAWAII FESTIVAL is a Sanrio song, not counted. Cotton Candy assumed Ruby solo.
+def puro(nid,lab,alt):
+    ks=['Koi ni Naritai AQUARIUM','KU-RU-KU-RU Cruller!','Jump up HIGH!!','U-CYU','Fabotage','Waai WaiWai WaiWaiWai!','Cotton Candy Ei-Ei-Oh!',alt,'Yuuki wa doko ni? Kimi no Mune ni!']
+    assert all(k in songs for k in ks)
+    return dict(id=nid,leg='',venue='サンリオピューロランド エンターテイメントホール',label=lab,date='2025-01-19',set=[dict(s=slug(k),m='8' if k.startswith('Cotton') else '458') for k in ks])
+outE.append(dict(name='推し活ピューロランドフェス×わいわいわい',kind='fan',online=False,shows=[puro(n,'第一部','Taiyou o Oikakero!'),puro(n+1,'第二部','Hop Step Waai!')]));n+=2
 for s in outS: s['o']=''.join(str(MEM.index(x)) for x in s['o'])
 json.dump(dict(songs=outS,events=outE),open(os.path.expanduser('~/Developer/aqours-kaishu/data.json'),'w'),ensure_ascii=False,separators=(',',':'))
 from collections import Counter
