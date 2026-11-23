@@ -28,7 +28,7 @@ ev('Aqours クラブ活動 LIVE & FAN MEETING 2018 ユニット対抗全国ツ�
  ('旭川公演（Guilty Kiss）','旭川市民文化会館',[('Day 1','2019-01-26')]+hn('2019-01-27','Day 2 ')),('沼津公演','沼津市民文化センター',[('CYaRon!','2019-02-09'),('AZALEA（昼）','2019-02-10'),('Guilty Kiss（夜）','2019-02-10')]),('大阪公演（CYaRon!）','オリックス劇場',[('Day 1','2019-02-16')]+hn('2019-02-17','Day 2 ')),
  ('東京公演（Aqours）','武蔵野の森総合スポーツプラザ',hn('2019-03-02','Day 1 ')+hn('2019-03-03','Day 2 '))],rep=lambda b:b[:-2]+[b[-2],b[-2],b[-1],b[-1]])
 ev('Aqours 4th LoveLive! ～Sailing to the Sunshine～','live','4th LoveLive! ～Sailing',[('','東京ドーム',days('2018-11-17','2018-11-18'))])
-ev('Aqours World LoveLive! ASIA TOUR 2019','live','ASIA TOUR 2019',[('上海公演','国家会展中心（上海）',days('2019-03-23','2019-03-24')),('台北公演','台北国際会議センター',days('2019-04-06','2019-04-07')),('千葉公演','幕張メッセ イベントホール',days('2019-04-13','2019-04-14')),('ソウル公演','KBSアリーナ',days('2019-04-20','2019-04-21'))],rep=lambda b:b*4)
+ev('Aqours World LoveLive! ASIA TOUR 2019','live','ASIA TOUR 2019',[('上海公演','国家会展中心（上海）',days('2019-03-23','2019-03-24')),('台北公演','台北国際会議センター',days('2019-04-06','2019-04-07')),('千葉公演','幕張メッセ イベントホール',days('2019-04-13','2019-04-14')),('ソウル公演','KBSアリーナ',days('2019-04-20','2019-04-21'))],rep=lambda b:b*4,absent={i:['dia'] for i in (1,3,4,5,6,7)})
 ev('Aqours 5th LoveLive! ～Next SPARKLING!!～','live','5th LoveLive! ～Next',[('','メットライフドーム',days('2019-06-08','2019-06-09'))])
 ev('Aqours World LoveLive! in LA ～BRAND NEW WAVE～','live','in LA ～BRAND',[('','The Novo（ロサンゼルス）',days('2019-07-05','2019-07-06'))],absent=['dia'])
 ev('Unit LIVE ADVENTURE 2020','live','Unit Live Adventure',[('Guilty Kiss ～New Romantic Sailors～','武蔵野の森総合スポーツプラザ',days('2020-02-08','2020-02-09')),('CYaRon! ～Braveheart Coaster～','西日本総合展示場 新館',days('2020-02-22','2020-02-23'))])
@@ -117,13 +117,15 @@ for c in CFG:
             if m: L_.append(dict(e,s=slug(e['s']),m=''.join(str(MEM.index(x)) for x in m)))
         shows.append(dict(id=n,leg=b['leg'],venue=b['venue'],label=b['label'],date=b['date'],set=L_,**({'approx':1} if b.get('approx') else {})));n+=1
     outE.append(dict(name=c['name'],kind=c['kind'],online=c['online'],shows=shows))
-# BML as its own event; 2017 keeps its id, 2019 is appended (source: setlist.fm, attendance unverified)
+# BML as its own event; 2017 keeps its id, 2019 is appended (source: setlist.fm; Dia absent per attendee report)
+asia=next(e for e in outE if 'ASIA TOUR 2019' in e['name'])
+for i in (0,2): asia['shows'][i]['note']=1
 awm=next(e for e in outE if e['name'].startswith('Anisong World Matsuri'))
 b17=next(s for s in awm['shows'] if s['leg']=='BILIBILI MACRO LINK')
 awm['shows'].remove(b17);awm['name']='Anisong World Matsuri 2017 ～Japan Kawaii Live～';awm['shows'][0]['leg']=''
 AR='メルセデス・ベンツアリーナ（上海）'
 b17.update(leg='BML-SP 2017',venue=AR)
-outE.append(dict(name='BILIBILI MACRO LINK - STAR PHASE（BML-SP）',kind='joint',online=False,shows=[b17,dict(id=n,leg='BML-SP 2019',venue=AR,label='',date='2019-07-21',set=[dict(s=slug(k),m='012345678') for k in ['Mirai no Bokura wa Shitteru yo','WATER BLUE NEW WORLD','WONDERFUL STORIES','Yuuki wa doko ni? Kimi no Mune ni!']])]));n+=1
+outE.append(dict(name='BILIBILI MACRO LINK - STAR PHASE（BML-SP）',kind='joint',online=False,shows=[b17,dict(id=n,leg='BML-SP 2019',venue=AR,label='',date='2019-07-21',set=[dict(s=slug(k),m='01245678') for k in ['Mirai no Bokura wa Shitteru yo','WATER BLUE NEW WORLD','WONDERFUL STORIES','Yuuki wa doko ni? Kimi no Mune ni!']])]));n+=1
 for s in outS: s['o']=''.join(str(MEM.index(x)) for x in s['o'])
 json.dump(dict(songs=outS,events=outE),open(os.path.expanduser('~/Developer/aqours-kaishu/data.json'),'w'),ensure_ascii=False,separators=(',',':'))
 from collections import Counter
