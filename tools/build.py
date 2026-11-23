@@ -117,6 +117,13 @@ for c in CFG:
             if m: L_.append(dict(e,s=slug(e['s']),m=''.join(str(MEM.index(x)) for x in m)))
         shows.append(dict(id=n,leg=b['leg'],venue=b['venue'],label=b['label'],date=b['date'],set=L_,**({'approx':1} if b.get('approx') else {})));n+=1
     outE.append(dict(name=c['name'],kind=c['kind'],online=c['online'],shows=shows))
+# BML as its own event; 2017 keeps its id, 2019 is appended (source: setlist.fm, attendance unverified)
+awm=next(e for e in outE if e['name'].startswith('Anisong World Matsuri'))
+b17=next(s for s in awm['shows'] if s['leg']=='BILIBILI MACRO LINK')
+awm['shows'].remove(b17);awm['name']='Anisong World Matsuri 2017 ～Japan Kawaii Live～';awm['shows'][0]['leg']=''
+AR='メルセデス・ベンツアリーナ（上海）'
+b17.update(leg='BML-SP 2017',venue=AR)
+outE.append(dict(name='BILIBILI MACRO LINK - STAR PHASE（BML-SP）',kind='joint',online=False,shows=[b17,dict(id=n,leg='BML-SP 2019',venue=AR,label='',date='2019-07-21',set=[dict(s=slug(k),m='012345678') for k in ['Mirai no Bokura wa Shitteru yo','WATER BLUE NEW WORLD','WONDERFUL STORIES','Yuuki wa doko ni? Kimi no Mune ni!']])]));n+=1
 for s in outS: s['o']=''.join(str(MEM.index(x)) for x in s['o'])
 json.dump(dict(songs=outS,events=outE),open(os.path.expanduser('~/Developer/aqours-kaishu/data.json'),'w'),ensure_ascii=False,separators=(',',':'))
 from collections import Counter
